@@ -25,13 +25,33 @@ void Translator::getLangList()
     QNetworkRequest request(requestUrl);
     QNetworkReply   *reply = manager->get(request);
 
+    // Чтобы не надо было создавать отдельный слот
     QEventLoop  loop;
     connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
     loop.exec();
 
+    // Если ошибок в запросе нет
     if (reply->error() == QNetworkReply::NoError)
     {
-        qDebug() << QString::fromUtf8(reply->readAll());
+        // Парсим наш ответ
+        QJsonDocument   document = QJsonDocument::fromJson(reply->readAll());
+        QJsonObject     err      = document.object().value("code").toObject();
+        // Если в ответе нет кода ошибки
+        if (err.isEmpty())
+        {
+            QJsonObject lang     = document.object().value("langs").toObject();
+            foreach (QString value, lang.keys())
+            {
+                QString description  = lang[value].toString();
+                langMap[description] = value;
+                qDebug() << "Dictionary loaded";
+            }
+        }
+        else
+        {
+            // TODO: Сделать обработку ошибок
+
+        }
     }
 
 

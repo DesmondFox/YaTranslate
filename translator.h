@@ -6,6 +6,8 @@
 #include <QMap>
 #include <QtNetwork>
 #include <QDebug>
+#include <QJsonObject>
+#include <QJsonArray>
 
 class Translator : public QObject
 {
@@ -24,6 +26,7 @@ private:
 private slots:
 
 signals:
+    void error(int code, QString message);
 
 public slots:
 };
