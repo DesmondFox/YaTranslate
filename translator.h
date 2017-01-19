@@ -16,6 +16,7 @@ public:
     explicit Translator(const QString &key, QObject *parent = 0);
     void getLangList();
     void setUI(QString ui);
+    QStringList langList();
 
 private:
     QString apiKey;

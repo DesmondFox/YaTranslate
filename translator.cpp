@@ -2,10 +2,10 @@
 
 Translator::Translator(const QString &key, QObject *parent) : QObject(parent)
 {
+    qDebug() << "load";
     apiKey  = key;
     apiVer  = "v1.5";
     uiLang  = "ru";     // TODO: Изменять в зависимости от locale
-
 }
 
 void Translator::setUI(QString ui)
@@ -44,8 +44,8 @@ void Translator::getLangList()
             {
                 QString description  = lang[value].toString();
                 langMap[description] = value;
-                qDebug() << "Dictionary loaded";
             }
+            qDebug() << "Dictionary loaded";
         }
         else
         {
@@ -53,6 +53,15 @@ void Translator::getLangList()
 
         }
     }
+}
 
-
+QStringList Translator::langList()
+{
+    QStringList list;
+    foreach (QString value, langMap)
+    {
+        list.append(langMap.key(value));
+    }
+    qDebug() << list;
+    return list;
 }
