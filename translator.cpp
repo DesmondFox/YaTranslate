@@ -100,11 +100,12 @@ void Translator::getText(QString text, QString langFrom_name, QString langTo_nam
         QString langFrom_Ui = langMap.key(document.object().value("lang").toString().split("-")[0]);
         QString outputText  = document.object().value("text").toArray()[0].toString();
         emit translate(outputText, langFrom_Ui);
+        qDebug() << "Note:\t"<< "Translating: " << text;
     }
     else
     {
         error(code.toInt(), "Error");
         qDebug() << "Error:\t" << code;
     }
-    qDebug() << "translate...";
+
 }
