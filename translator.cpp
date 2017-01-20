@@ -15,7 +15,7 @@ void Translator::setUI(QString ui)
 
 void Translator::getLangList()
 {
-    QUrl requestUrl("https://translate.yandex.net/api/v1.5/tr.json/getLangs");
+    QUrl requestUrl("https://translate.yandex.net/api/"+apiVer+"/tr.json/getLangs");
     QUrlQuery query;
     query.addQueryItem("key",   apiKey);
     query.addQueryItem("ui",    uiLang);
@@ -49,8 +49,7 @@ void Translator::getLangList()
         }
         else
         {
-            // TODO: Сделать обработку ошибок
-
+            qDebug() << "err";
         }
     }
 }
@@ -62,6 +61,50 @@ QStringList Translator::langList()
     {
         list.append(langMap.key(value));
     }
-    qDebug() << list;
+    qDebug() << "List created";
     return list;
+}
+
+QString Translator::getNameOfLang(const QString &ui)
+{
+    return langMap.key(ui);
+}
+
+void Translator::getText(QString text, QString langFrom_name, QString langTo_name)
+{
+    QString langFrom = langMap[langFrom_name];
+    QString langTo   = langMap[langTo_name];
+
+    QUrl requestUrl("https://translate.yandex.net/api/"+apiVer+"/tr.json/translate");
+    QUrlQuery query;
+    query.addQueryItem("key", apiKey);
+    query.addQueryItem("text", text);
+    query.addQueryItem("lang", langFrom+"-"+langTo);
+    query.addQueryItem("format", "html");
+
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    QNetworkRequest request(requestUrl);
+    request.setHeader(QNetworkRequest::UserAgentHeader, QVariant("YaTranslator/1.0"));
+    QNetworkReply   *reply = manager->post(request, query.toString().toUtf8());
+
+    // Ожидаем ответ
+    QEventLoop loop;
+    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+
+    // Парсим ответ
+    QJsonDocument document  = QJsonDocument::fromJson(reply->readAll());
+    QString code            = QString::number(document.object().value("code").toDouble());
+    if (code == QString::number(200))
+    {
+        QString langFrom_Ui = langMap.key(document.object().value("lang").toString().split("-")[0]);
+        QString outputText  = document.object().value("text").toArray()[0].toString();
+        emit translate(outputText, langFrom_Ui);
+    }
+    else
+    {
+        error(code.toInt(), "Error");
+        qDebug() << "Error:\t" << code;
+    }
+    qDebug() << "translate...";
 }
