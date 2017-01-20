@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbLang2->insertItems(0, trans->langList());
     ui->cbLang2->setCurrentIndex(2);
     ui->checkAutoTranslate->setChecked(true);
+    ui->pushSwap->setEnabled(false);
 
 //    connect(ui->plainLang1, SIGNAL(textChanged()), SLOT(slotTranslate()));
     connect(this, SIGNAL(translateText(QString,QString,QString)), trans, SLOT(getText(QString,QString,QString)));
@@ -37,9 +38,7 @@ void MainWindow::slotTranslate()
     {
         if (ui->checkAutoTranslate->isChecked())
         {
-            emit translateText(ui->plainLang1->toPlainText(),
-                               ui->cbLang1->currentText(),
-                               ui->cbLang2->currentText());
+            translate();
         }
     }
 }
@@ -52,7 +51,10 @@ void MainWindow::getTranslate(QString text, QString lang)
 
 void MainWindow::on_pushSwap_clicked()
 {
-
+    int tmp = ui->cbLang2->currentIndex();
+    ui->cbLang2->setCurrentIndex(ui->cbLang1->currentIndex()-1);
+    ui->cbLang1->setCurrentIndex(tmp+1);
+    translate();
 }
 
 void MainWindow::slotTimerTick()
@@ -62,9 +64,7 @@ void MainWindow::slotTimerTick()
         if (ui->cbLang1->currentIndex() != 1)
         {
             dumpText = ui->plainLang1->toPlainText();
-            emit translateText(ui->plainLang1->toPlainText(),
-                               ui->cbLang1->currentText(),
-                               ui->cbLang2->currentText());
+            translate();
         }
     }
 }
@@ -81,4 +81,35 @@ void MainWindow::on_checkAutoTranslate_clicked()
         timer->stop();
         qDebug() << "Note:\t" << "Timer stopped";
     }
+}
+
+void MainWindow::on_pushTranslate_clicked()
+{
+    dumpText = ui->plainLang1->toPlainText();
+    translate();
+}
+
+void MainWindow::translate()
+{
+    emit translateText(ui->plainLang1->toPlainText(),
+                       ui->cbLang1->currentText(),
+                       ui->cbLang2->currentText());
+}
+
+
+
+void MainWindow::on_cbLang1_currentIndexChanged(int index)
+{
+    if (index != 0)
+    {
+        ui->pushSwap->setEnabled(true);
+        translate();
+    }
+    else
+        ui->pushSwap->setEnabled(false);
+}
+
+void MainWindow::on_cbLang2_currentIndexChanged(int index)
+{
+    translate();
 }

@@ -29,10 +29,16 @@ private slots:
 
     void on_checkAutoTranslate_clicked();
 
+    void on_pushTranslate_clicked();
+    void on_cbLang1_currentIndexChanged(int index);
+
+    void on_cbLang2_currentIndexChanged(int index);
+
 private:
     Ui::MainWindow  *ui;
     QString         dumpText;
     QTimer          *timer;
+    void translate();
 
 signals:
     void translateText(QString text, QString langFrom, QString langTo);
