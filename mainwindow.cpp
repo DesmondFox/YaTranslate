@@ -15,16 +15,18 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->cbLang2->setCurrentIndex(2);
     ui->checkAutoTranslate->setChecked(true);
     ui->pushSwap->setEnabled(false);
-
     timerInterval = 500;
+
 //    connect(ui->plainLang1, SIGNAL(textChanged()), SLOT(slotTranslate()));
     connect(this, SIGNAL(translateText(QString,QString,QString)), trans, SLOT(getText(QString,QString,QString)));
     connect(trans, SIGNAL(translate(QString,QString)), SLOT(getTranslate(QString,QString)));
+    connect(trans, SIGNAL(possibleLang(QString)), SLOT(slotPossibleLang(QString)));
 
     // Инициализация таймера
     timer   = new QTimer(this);
     timer->start(timerInterval);
     connect(timer, SIGNAL(timeout()), SLOT(slotTimerTick()));
+
 }
 
 MainWindow::~MainWindow()
@@ -55,7 +57,7 @@ void MainWindow::on_pushSwap_clicked()
     int tmp = ui->cbLang2->currentIndex();
     ui->cbLang2->setCurrentIndex(ui->cbLang1->currentIndex()-1);
     ui->cbLang1->setCurrentIndex(tmp+1);
-    translate();
+//    translate();
 }
 
 void MainWindow::slotTimerTick()
@@ -73,7 +75,6 @@ void MainWindow::on_checkAutoTranslate_clicked()
 {
     if (ui->checkAutoTranslate->isChecked())
     {
-        timer->start(1000);
         timer->start(timerInterval);
         qDebug() << "Note:\t" << "Timer started(" << timer->interval() << ")";
     }
@@ -98,10 +99,7 @@ void MainWindow::translate()
     emit translateText(ui->plainLang1->toPlainText(),
                        ui->cbLang1->currentText(),
                        ui->cbLang2->currentText());
-
 }
-
-
 
 void MainWindow::on_cbLang1_currentIndexChanged(int index)
 {
@@ -118,4 +116,21 @@ void MainWindow::on_cbLang2_currentIndexChanged(int index)
 {
 
     translate();
+}
+
+void MainWindow::on_possibleAction_triggered()
+{
+    trans->setPossibleLang(ui->possibleAction->isChecked());
+}
+
+void MainWindow::slotPossibleLang(QString langName)
+{
+    // Принимаем сигнал и записываем во временную переменную, чтобы можно было бы язык выбрать
+    ui->labelPossibleLang->setText("Возможный язык: <font color=blue><i>"+langName+"</i></font>");
+    tmpPossLang = langName;
+}
+
+void MainWindow::on_labelPossibleLang_linkActivated(const QString &link)
+{
+    qDebug() << "lold";
 }
