@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     trans   = new Translator(QString("trnsl.1.1.20170119T172651Z.6515d44d0b7d462b.c2fef498738e6da7a95efd083b1386b718e67e43"));
     trans->getLangList();
-    ui->cbLang1->addItem(" - ");
+    ui->cbLang1->addItem("Определить язык");        // TODO:
     ui->cbLang1->insertItems(1, trans->langList());
     ui->cbLang2->insertItems(0, trans->langList());
     ui->cbLang2->setCurrentIndex(2);
@@ -63,7 +63,6 @@ void MainWindow::slotTimerTick()
     {
         if (ui->cbLang1->currentIndex() != 1)
         {
-            dumpText = ui->plainLang1->toPlainText();
             translate();
         }
     }
@@ -85,22 +84,26 @@ void MainWindow::on_checkAutoTranslate_clicked()
 
 void MainWindow::on_pushTranslate_clicked()
 {
-    dumpText = ui->plainLang1->toPlainText();
-    translate();
+    if (ui->cbLang1->currentIndex() != 0)
+    {
+        translate();
+    }
 }
 
 void MainWindow::translate()
 {
+    dumpText = ui->plainLang1->toPlainText();
     emit translateText(ui->plainLang1->toPlainText(),
                        ui->cbLang1->currentText(),
                        ui->cbLang2->currentText());
+
 }
 
 
 
 void MainWindow::on_cbLang1_currentIndexChanged(int index)
 {
-    if (index != 0)
+    if (ui->cbLang1->currentIndex() != 0)
     {
         ui->pushSwap->setEnabled(true);
         translate();
@@ -111,5 +114,6 @@ void MainWindow::on_cbLang1_currentIndexChanged(int index)
 
 void MainWindow::on_cbLang2_currentIndexChanged(int index)
 {
+
     translate();
 }
