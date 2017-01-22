@@ -166,8 +166,5 @@ void Translator::setPossibleLang(bool poss)
 {
     // Принимаем возможный язык и записываем в переменную, чтобы потом можно было бы выбрать этот язык
     possibleLangFlag    = poss;
-    tmpPossLang         = poss;
     qDebug() << "Note:\t possible flag - " << poss;
 }
-
-

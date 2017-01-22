@@ -42,6 +42,8 @@ private:
     QTimer          *timer;
     void            translate();
     int             timerInterval;
+    QString         tmpPossLang;    // Для временного хранения возможного языка (слишком часто употребляю слово "Возможный")
+    
 signals:
     void translateText(QString text, QString langFrom, QString langTo);
 
