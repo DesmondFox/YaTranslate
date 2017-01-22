@@ -24,6 +24,7 @@ private:
     QString apiVer;
     QString uiLang;
     QMap<QString, QString> langMap;
+    QString getPossibleLang(QString text);
 
 private slots:
 

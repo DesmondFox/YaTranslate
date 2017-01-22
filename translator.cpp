@@ -2,7 +2,7 @@
 
 Translator::Translator(const QString &key, QObject *parent) : QObject(parent)
 {
-    qDebug() << "load";
+    qDebug() << "loading";
     apiKey  = key;
     apiVer  = "v1.5";
     uiLang  = "ru";     // TODO: Изменять в зависимости от locale
@@ -54,6 +54,35 @@ void Translator::getLangList()
     }
 }
 
+QString Translator::getPossibleLang(QString text)
+{
+    qDebug() << "Requesting the possible lang";
+    QUrl        requestUrl("https://translate.yandex.net/api/v1.5/tr.json/detect");
+    QUrlQuery   query;
+    query.addQueryItem("key", apiKey);
+    query.addQueryItem("text", text);
+    requestUrl.setQuery(query);
+
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    QNetworkRequest request(requestUrl);
+    QNetworkReply   *reply = manager->get(request);
+
+    QEventLoop loop;
+    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec();
+
+    if (reply->error() == QNetworkReply::NoError)
+    {
+        QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
+        QString       lang     = document.object().value("lang").toString();
+        qDebug() << "Possible lang: " << lang;
+        return lang;
+    }
+    else
+        qWarning() << reply->errorString();
+
+}
+
 QStringList Translator::langList()
 {
     QStringList list;
@@ -72,9 +101,16 @@ QString Translator::getNameOfLang(const QString &ui)
 
 void Translator::getText(QString text, QString langFrom_name, QString langTo_name)
 {
-    QString langFrom = langMap[langFrom_name];
+    // Если выбрано "Определить язык", то вызываем функцию определения
+    QString langFrom;
+    if (langMap.contains(langFrom_name))
+        langFrom     = langMap[langFrom_name];
+    else
+        langFrom     = getPossibleLang(text);
+
     QString langTo   = langMap[langTo_name];
 
+    // Формируем запрос
     QUrl requestUrl("https://translate.yandex.net/api/"+apiVer+"/tr.json/translate");
     QUrlQuery query;
     query.addQueryItem("key", apiKey);
@@ -109,5 +145,6 @@ void Translator::getText(QString text, QString langFrom_name, QString langTo_nam
         error(code.toInt(), "Error");
         qDebug() << "Error:\t" << code;
     }
+    delete reply;
 
 }
