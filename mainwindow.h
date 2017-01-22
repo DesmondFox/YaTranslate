@@ -38,8 +38,8 @@ private:
     Ui::MainWindow  *ui;
     QString         dumpText;
     QTimer          *timer;
-    void translate();
-
+    void            translate();
+    int             timerInterval;
 signals:
     void translateText(QString text, QString langFrom, QString langTo);
 

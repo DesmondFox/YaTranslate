@@ -16,13 +16,14 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->checkAutoTranslate->setChecked(true);
     ui->pushSwap->setEnabled(false);
 
+    timerInterval = 500;
 //    connect(ui->plainLang1, SIGNAL(textChanged()), SLOT(slotTranslate()));
     connect(this, SIGNAL(translateText(QString,QString,QString)), trans, SLOT(getText(QString,QString,QString)));
     connect(trans, SIGNAL(translate(QString,QString)), SLOT(getTranslate(QString,QString)));
 
     // Инициализация таймера
     timer   = new QTimer(this);
-    timer->start(1000);
+    timer->start(timerInterval);
     connect(timer, SIGNAL(timeout()), SLOT(slotTimerTick()));
 }
 
@@ -73,6 +74,7 @@ void MainWindow::on_checkAutoTranslate_clicked()
     if (ui->checkAutoTranslate->isChecked())
     {
         timer->start(1000);
+        timer->start(timerInterval);
         qDebug() << "Note:\t" << "Timer started(" << timer->interval() << ")";
     }
     else
