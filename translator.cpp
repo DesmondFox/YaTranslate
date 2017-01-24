@@ -125,7 +125,7 @@ void Translator::getText(QString text, QString langFrom_name, QString langTo_nam
     request.setHeader(QNetworkRequest::UserAgentHeader, QVariant("YaTranslator/1.0"));
     request.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/x-www-form-urlencoded"));
 
-    QNetworkReply   *reply = manager->post(request, query.toString().toUtf8());
+    QNetworkReply   *reply  = manager->post(request, query.toString().toUtf8());
 
     // Ожидаем ответ
     QEventLoop loop;

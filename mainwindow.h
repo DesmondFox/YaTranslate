@@ -6,6 +6,7 @@
 #include <QDebug>
 #include "translator.h"
 #include "labelpossiblelang.h"
+#include "aboutdialog.h"
 
 namespace Ui {
 class MainWindow;

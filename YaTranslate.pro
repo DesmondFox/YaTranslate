@@ -26,12 +26,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp \
     translator.cpp \
     mainwindow.cpp \
-    labelpossiblelang.cpp
+    labelpossiblelang.cpp \
+    aboutdialog.cpp
 
 HEADERS  += \
     translator.h \
     mainwindow.h \
-    labelpossiblelang.h
+    labelpossiblelang.h \
+    aboutdialog.h
 
 FORMS    += \
-    mainwindow.ui
+    mainwindow.ui \
+    aboutdialog.ui

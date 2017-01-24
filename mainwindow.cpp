@@ -28,6 +28,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Строка "Возможный язык:"
     connect(ui->label, SIGNAL(clicked()), SLOT(slotChangeLangFrom()));
+
+    // Строка «Переведено сервисом «Яндекс.Переводчик»
+    QLabel *lblCopy = new QLabel("<a href=\"http://translate.yandex.ru/\">Переведено сервисом «Яндекс.Переводчик»</a>", this);
+    ui->statusbar->addWidget(lblCopy);
+    lblCopy->setOpenExternalLinks(true);
+
+    // Диалог "О программе"
+    AboutDialog *aboutDlg = new AboutDialog(this);
+    connect(ui->actionAbout, SIGNAL(triggered(bool)), aboutDlg, SLOT(exec()));
 }
 
 MainWindow::~MainWindow()
@@ -135,4 +144,5 @@ void MainWindow::slotChangeLangFrom()
 {
     ui->cbLang1->setCurrentText(tmpPossLang);
     ui->label->setText("");
+    qDebug() << "Note:\tLang changed -> " << tmpPossLang;
 }

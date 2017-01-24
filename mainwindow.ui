@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>623</width>
-    <height>261</height>
+    <width>675</width>
+    <height>279</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>YaTranslate 0.1a</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
@@ -101,7 +101,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>623</width>
+     <width>675</width>
      <height>21</height>
     </rect>
    </property>
@@ -110,6 +110,8 @@
      <string>Опции</string>
     </property>
     <addaction name="possibleAction"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menu"/>
   </widget>
@@ -123,6 +125,11 @@
    </property>
    <property name="text">
     <string>Показывать возможный язык</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>О программе</string>
    </property>
   </action>
  </widget>
