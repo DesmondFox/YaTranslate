@@ -27,7 +27,6 @@ private:
     QMap<QString, QString> langMap;
     QString getPossibleLang(QString text);
     bool possibleLangFlag;
-    QString tmpPossLang;    // Для временного хранения возможного языка (слишком часто употребляю слово "Возможный")
 
 private slots:
 

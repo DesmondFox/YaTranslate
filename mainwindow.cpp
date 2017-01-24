@@ -5,7 +5,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-
     ui->setupUi(this);
     trans   = new Translator(QString("trnsl.1.1.20170119T172651Z.6515d44d0b7d462b.c2fef498738e6da7a95efd083b1386b718e67e43"));
     trans->getLangList();
@@ -27,6 +26,8 @@ MainWindow::MainWindow(QWidget *parent) :
     timer->start(timerInterval);
     connect(timer, SIGNAL(timeout()), SLOT(slotTimerTick()));
 
+    // Строка "Возможный язык:"
+    connect(ui->label, SIGNAL(clicked()), SLOT(slotChangeLangFrom()));
 }
 
 MainWindow::~MainWindow()
@@ -125,12 +126,13 @@ void MainWindow::on_possibleAction_triggered()
 
 void MainWindow::slotPossibleLang(QString langName)
 {
-    // Принимаем сигнал и записываем во временную переменную, чтобы можно было бы язык выбрать
-    ui->labelPossibleLang->setText("Возможный язык: <font color=blue><i>"+langName+"</i></font>");
+    // Принимаем сигнал и записываем во временную переменную, чтобы можно язык выбрать
+    ui->label->setText("Возможный язык: <font color=blue><i>"+langName+"</i></font>");
     tmpPossLang = langName;
 }
 
-void MainWindow::on_labelPossibleLang_linkActivated(const QString &link)
+void MainWindow::slotChangeLangFrom()
 {
-    qDebug() << "lold";
+    ui->cbLang1->setCurrentText(tmpPossLang);
+    ui->label->setText("");
 }

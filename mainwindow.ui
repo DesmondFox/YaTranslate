@@ -80,7 +80,13 @@
        <widget class="QComboBox" name="cbLang2"/>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="labelPossibleLang">
+       <widget class="LabelPossibleLang" name="label">
+        <property name="toolTip">
+         <string>Нажмите для изменения языка</string>
+        </property>
+        <property name="toolTipDuration">
+         <number>-1</number>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -120,6 +126,13 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LabelPossibleLang</class>
+   <extends>QLabel</extends>
+   <header>labelpossiblelang.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
