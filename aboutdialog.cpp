@@ -7,6 +7,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->labelBuild->setText("Build time: "+QString(__DATE__)+" "+QString(__TIME__));
+    connect(ui->pushOk, SIGNAL(clicked(bool)), SLOT(close()));
 }
 
 AboutDialog::~AboutDialog()
